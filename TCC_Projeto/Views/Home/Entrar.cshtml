@@ -1,0 +1,65 @@
+﻿@page
+@model TCC_Projeto.Views.Home.EntrarModel
+@{
+/*    ViewData["Title"] = "Home";  *TODO ERRO AO CARREGAR PAGINA* */
+}
+<div>
+    <a href="/Etiqueta/CriarImpressao/" class="btn btn-success" role="button" aria-pressed="true">Criar Novo PDF</a>
+</div>
+<br>
+
+<table class="table table-sm table-dark" id="tabelaPDF">
+    <thead>
+        <tr>
+            <th scope="col-1">ID</th>
+            <th scope="col-1">Descrição</th>
+            <th scope="col">Data</th>
+            <th scope="col-1">Baixar</th>
+            <th scope="col-1">Editar</th>
+            <th scope="col-1">Deletar</th>
+        </tr>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
+
+<script>
+
+    $.ajax({
+        url: '/Etiqueta/ObterTodosPDF',
+        type: 'GET',
+        dataType: 'json',
+        success: function (data) {
+            console.log(data)
+            data.map((item) => {
+                var numeroPedido = item.pedido != null ? item.nPedido : 'Sem Número de pedido'
+                var dataPedido = item.data != null ? item.data : 'Sem Data de pedido'
+                $("#tabelaPDF > tbody").append(
+                    `
+                    <tr>
+                        <td>${item.id}</td>
+                        <td>${numeroPedido}</td>
+                        <td>${dataPedido}</td>
+                            <td  style="width:5px">
+                            <a href="#">
+                                <button class="btn btn-info text-light"><i class="bi bi-arrow-down-square-fill"></i></button>
+                            </a>
+                        </td>
+                        <td style="width:5px">
+                            <a href="/Etiqueta/CriarImpressaoDetalhes/${item.id}">
+                                <button class="btn btn-warning text-light"><i class="bi bi-pencil-fill  "></i></button>
+                            </a>
+                        </td>
+                        <td style="width:5px">
+                            <a href="/Etiqueta/ExcluirPDF/${item.id}">
+                                <button class="btn btn-danger text-light"><i class="bi bi-trash-fill  "></i></button>
+                            </a>
+                        </td>
+                    </tr>
+                    `
+                )
+            })
+
+        }
+    })
+</script>
