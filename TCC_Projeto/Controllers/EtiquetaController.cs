@@ -10,6 +10,7 @@ using iText.Layout.Element;
 using iText.Layout.Properties;
 using iText.IO.Image;
 using Microsoft.AspNetCore.Authorization;
+using static iText.StyledXmlParser.Jsoup.Select.Evaluator;
 
 
 namespace TCC_Projeto.Controllers
@@ -89,11 +90,17 @@ namespace TCC_Projeto.Controllers
         }
 
         [Authorize]
-        public async Task<IActionResult> CriarImpressao()
+        public async Task<IActionResult> CriarImpressao(CriarImpressaoModel request)
         {
-            var pdfModel = new PDF();
+            var pdfModel = new PDF
+            {
+                NPedido = request.NPedido,
+                Data = request.Data,
+            };
             _context.PDF.Add(pdfModel);
             await _context.SaveChangesAsync();
+
+
 
             return RedirectToAction("CriarImpressaoDetalhes", new { id = pdfModel.Id });
 
@@ -110,6 +117,8 @@ namespace TCC_Projeto.Controllers
             }
 
             ViewBag.PDFId = id;
+            ViewBag.NPedido = pdfModel.NPedido;
+            ViewBag.Data = pdfModel.Data?.ToString("yyyy-MM-dd");
 
             return View(pdfModel); // Retorna a visão com o objeto encontrado
         }

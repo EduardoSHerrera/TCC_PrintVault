@@ -35,7 +35,11 @@
 
             <div class="col-6">
                 <label class="form-label">Largura</label>
-                <input type="number" name="largura" value="1" class="form-control" />
+                <select name="largura" class="form-control">
+                    <option value="" selected>------------</option>
+                    <option value="25">25mm</option>
+                    <option value="40">40mm</option>
+                </select>
             </div>
         </div>
     </div>
@@ -49,7 +53,7 @@
 </form>
 
 <script>
-    let imagens = Array()
+
     $("#fechar_modal").click(() => {
         $("#modalMix").modal('hide')
     })

@@ -4,7 +4,7 @@
 /*    ViewData["Title"] = "Home";  *TODO ERRO AO CARREGAR PAGINA* */
 }
 <div>
-    <a href="/Etiqueta/CriarImpressao/" class="btn btn-success" role="button" aria-pressed="true">Criar Novo PDF</a>
+    <button id="btn_novo_pdf" class="btn btn-success" role="button" aria-pressed="true">Criar Novo PDF</button>
 </div>
 <br>
 
@@ -12,7 +12,7 @@
     <thead>
         <tr>
             <th scope="col-1">ID</th>
-            <th scope="col-1">Descrição</th>
+            <th scope="col-1">Pedido</th>
             <th scope="col">Data</th>
             <th scope="col-1">Baixar</th>
             <th scope="col-1">Editar</th>
@@ -23,7 +23,42 @@
     </tbody>
 </table>
 
+<div class="modal fade" id="modalMix" tabindex="-1" role="dialog" aria-labelledby="modalMixLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+        <div class="modal-content" id="modalContent">
+            <div class="modal-header">
+                <h5 class="modal-title">Novo PDF</h5>
+                <button type="button" class="close" onclick="fecharModal()" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <form action="/Etiqueta/CriarImpressao/" method="post">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <label class="text-dark" for="id_pedido">Pedido</label>
+                            <input type="text" class="form-control" id="id_pedido" name="NPedido">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="text-dark" for="id_data">Data de Lançamento</label>
+                            <input type="date" class="form-control" id="id_data" placeholder="Insira uma data" name="Data">
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-danger" onclick="fecharModal()">Voltar</button>
+                    <button type="submit" class="btn btn-success">Continuar</button>
+                </div> 
+            </form>
+        </div>
+    </div>
+</div>
+
 <script>
+
+    function fecharModal() {
+        $("#modalMix").modal("hide")
+    }
 
     $.ajax({
         url: '/Etiqueta/ObterTodosPDF',
@@ -32,7 +67,7 @@
         success: function (data) {
             console.log(data)
             data.map((item) => {
-                var numeroPedido = item.pedido != null ? item.nPedido : 'Sem Número de pedido'
+                var numeroPedido = item.nPedido != null ? item.nPedido : 'Sem Número de pedido'
                 var dataPedido = item.data != null ? item.data : 'Sem Data de pedido'
                 $("#tabelaPDF > tbody").append(
                     `
@@ -61,5 +96,11 @@
             })
 
         }
+    })
+
+    $("#btn_novo_pdf").click(() => {
+        $("#id_pedido").val("");
+        $("#id_data").val("");
+        $("#modalMix").modal("show");
     })
 </script>
