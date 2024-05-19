@@ -1,22 +1,22 @@
 ﻿@page
 @model TCC_Projeto.Views.Home.EntrarModel
 @{
-/*    ViewData["Title"] = "Home";  *TODO ERRO AO CARREGAR PAGINA* */
+    /* ViewData["Title"] = "Home";  *TODO ERRO AO CARREGAR PAGINA* */
 }
-<div>
+<div class="d-flex align-items-start6">
     <button id="btn_novo_pdf" class="btn btn-success" role="button" aria-pressed="true">Criar Novo PDF</button>
 </div>
 <br>
 
-<table class="table table-sm table-dark" id="tabelaPDF">
+<table class="table table-sm table-dark" id="tabelaPDF" style="width: 100%">
     <thead>
         <tr>
-            <th scope="col-1">ID</th>
-            <th scope="col-1">Pedido</th>
-            <th scope="col">Data</th>
-            <th scope="col-1">Baixar</th>
-            <th scope="col-1">Editar</th>
-            <th scope="col-1">Deletar</th>
+            <th scope="col">ID</th>
+            <th scope="col">Pedido</th>
+            <th scope="col" style="text-align: start">Data</th>
+            <th scope="col" style="text-align: start">Baixar</th>
+            <th scope="col">Editar</th>
+            <th scope="col">Deletar</th>
         </tr>
     </thead>
     <tbody>
@@ -48,59 +48,96 @@
                 <div class="modal-footer">
                     <button type="button" class="btn btn-danger" onclick="fecharModal()">Voltar</button>
                     <button type="submit" class="btn btn-success">Continuar</button>
-                </div> 
+                </div>
             </form>
         </div>
     </div>
 </div>
 
 <script>
-
     function fecharModal() {
         $("#modalMix").modal("hide")
     }
 
-    $.ajax({
-        url: '/Etiqueta/ObterTodosPDF',
-        type: 'GET',
-        dataType: 'json',
-        success: function (data) {
-            console.log(data)
-            data.map((item) => {
-                var numeroPedido = item.nPedido != null ? item.nPedido : 'Sem Número de pedido'
-                var dataPedido = item.data != null ? item.data : 'Sem Data de pedido'
-                $("#tabelaPDF > tbody").append(
-                    `
-                    <tr>
-                        <td>${item.id}</td>
-                        <td>${numeroPedido}</td>
-                        <td>${dataPedido}</td>
-                            <td  style="width:5px">
-                            <a href="#">
-                                <button class="btn btn-info text-light"><i class="bi bi-arrow-down-square-fill"></i></button>
-                            </a>
-                        </td>
-                        <td style="width:5px">
-                            <a href="/Etiqueta/CriarImpressaoDetalhes/${item.id}">
-                                <button class="btn btn-warning text-light"><i class="bi bi-pencil-fill  "></i></button>
-                            </a>
-                        </td>
-                        <td style="width:5px">
-                            <a href="/Etiqueta/ExcluirPDF/${item.id}">
-                                <button class="btn btn-danger text-light"><i class="bi bi-trash-fill  "></i></button>
-                            </a>
-                        </td>
-                    </tr>
-                    `
-                )
-            })
+    $(document).ready(function () {
+        carregarPDFs();
 
-        }
-    })
+        $('#btn_novo_pdf').click(function () {
+            $("#id_pedido").val("");
+            $("#id_data").val("");
+            $("#modalMix").modal("show");
+        });
+    });
 
-    $("#btn_novo_pdf").click(() => {
-        $("#id_pedido").val("");
-        $("#id_data").val("");
-        $("#modalMix").modal("show");
-    })
+    function carregarPDFs() {
+        $.ajax({
+            url: '/Etiqueta/ObterTodosPDF',
+            type: 'GET',
+            dataType: 'json',
+            success: function (data) {
+                if ($.fn.DataTable.isDataTable('#tabelaPDF')) {
+                    $('#tabelaPDF').DataTable().destroy();
+                    $('#tabelaPDF tbody').empty();
+                }
+
+                data.map((item) => {
+                    var numeroPedido = item.nPedido != null ? item.nPedido : 'Sem Número de pedido';
+                    var dataPedido = item.data != null ? item.data : 'Sem Data de pedido';
+                    $('#tabelaPDF tbody').append(
+                        `<tr>
+                                <td>${item.id}</td>
+                                <td>${numeroPedido}</td>
+                                <td>${dataPedido}</td>
+                                <td style="width:5px">
+                                    <a href="#">
+                                        <button class="btn btn-info text-light"><i class="bi bi-arrow-down-square-fill"></i></button>
+                                    </a>
+                                </td>
+                                <td style="width:5px">
+                                    <a href="/Etiqueta/CriarImpressaoDetalhes/${item.id}">
+                                        <button class="btn btn-warning text-light"><i class="bi bi-pencil-fill"></i></button>
+                                    </a>
+                                </td>
+                                <td style="width:5px">
+                                    <a href="/Etiqueta/ExcluirPDF/${item.id}">
+                                        <button class="btn btn-danger text-light"><i class="bi bi-trash-fill"></i></button>
+                                    </a>
+                                </td>
+                            </tr>`
+                    );
+                });
+                $('#tabelaPDF').DataTable({
+                    "pageLength": 10,
+                    "lengthMenu": [[5, 10, 50, -1], [5, 10, 50, "Todos"]],
+                    "order": [1, 'asc'],
+                    "language": {
+                        url: '//cdn.datatables.net/plug-ins/1.10.24/i18n/Portuguese-Brasil.json'
+                    },
+                    "columnDefs": [
+                        {
+                            "targets": [0,3,4,5], "orderable": false, "searchable": false, width: "5%"
+                        },
+                        {
+                            "targets": [1, 2], "className": "text-start", "orderable": false, "searchable": false,
+                        },
+                    ],
+                    responsive: true,
+                })
+            }
+        });
+    }
 </script>
+
+<style>
+    .table-row-odd {
+        background-color: #ffffff;
+    }
+
+    .table-row-even {
+        background-color: #f2f2f2;
+    }
+
+    .dt-left {
+        text-align: left;
+    }
+</style>

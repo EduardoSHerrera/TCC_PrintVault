@@ -27,17 +27,26 @@
 
 <body class="text-center">
     <div class="cover-container d-flex w-100 h-100 mx-auto flex-column">
-        <header class="masthead mb-auto" style="background-color: #333;">
-            <div class="inner">
-                <br>
-                <h3 class="masthead-brand mt-2 text-light">Automação de Fita</h3>
+        <header class="mb-5 p-3 sombra-menu" style="background-color: #093880;">
+            <div class="d-flex justify-content-between align-text-center">
+                <h3 class="text-light">Automação de Fita</h3>
                 <nav class="nav nav-masthead justify-content-center">
                     <a class="nav-link active lista_menu" href="/Home/Entrar/">Home</a>
                     <a class="nav-link lista_menu" href="/Etiqueta/Etiqueta/">Fita</a>
-                    <!--Nao sabemos se sera implementado-->
+                    <!--Nao sabemos se será implementado-->
                     <!--<a class="nav-link lista_menu" href="#">Estoque</a>-->
-                    <a class="nav-link" href="/Home/Signout/">Sair</a>
                 </nav>
+                <div class="dropdown">
+                    <div type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                        A
+                    </div>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li>
+                            <a class="nav-link text-dark link-sair" href="/Home/Signout/">Sair</a>
+                        </li>
+                    </ul>
+                </div>
+
             </div>
         </header>
 
