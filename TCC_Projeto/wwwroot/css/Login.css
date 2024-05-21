@@ -62,7 +62,7 @@ input {
     background-color: #093880;
     left: 0;
     width: 450px;
-    height: 600px;
+    height: 660px;
     border-radius: 10px;
     position: absolute;
     display: flex;
@@ -78,7 +78,7 @@ input {
     right: 0;
     padding: 50px;
     align-items: center;
-    top: 30%;
+    top: 20%;
 }
 
 #texto-login p {

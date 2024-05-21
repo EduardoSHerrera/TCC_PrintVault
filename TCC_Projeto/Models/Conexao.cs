@@ -6,7 +6,7 @@ namespace TCC_Projeto.Models
 {
     public class Conexao : DbContext
     {
-        private const string ConnectionString = @"Data Source=(localdb)\MSSQLLocalDB;Initial Catalog=TCC_db;"; //dados para conectar no Banco
+        private const string ConnectionString = @"Data Source=database-1.cpa20amgw67k.us-east-2.rds.amazonaws.com,1433;Initial Catalog=printvault;User Id=admin;Password=senha123;";
         public Conexao() : base(ConnectionString) 
         {
             Usuarios = Set<Usuarios>();

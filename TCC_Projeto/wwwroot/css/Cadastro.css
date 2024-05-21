@@ -102,3 +102,17 @@ button {
     flex-direction: column;
     width: 45%;
 }
+
+#texto-login {
+    width: 450px;
+    display: flex;
+    position: absolute;
+    right: 0;
+    padding: 50px;
+    align-items: center;
+    top: 20%;
+}
+
+#texto-login p {
+    color: black !important;
+}
